@@ -31,7 +31,7 @@ module Devise #:nodoc:
               success!(user)
             else
               if klass.facebook_auto_create_account?
-                user = returning(klass.new) do |u|
+                klass.new.tap do |u|
                   u.store_facebook_credentials!(
                       :session_key => facebook_session.session_key,
                       :uid => facebook_user.uid

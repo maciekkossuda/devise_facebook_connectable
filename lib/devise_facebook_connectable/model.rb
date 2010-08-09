@@ -138,7 +138,7 @@ module Devise #:nodoc:
         #
         def new_facebook_session
           timeout_in = ::Devise.respond_to?(:timeout_in) ? ::Devise.timeout_in : 1.hour.from_now
-          returning(::Facebooker::Session.create) do |new_session|
+          ::Facebooker::Session.create.tap do |new_session|
             new_session.secure_with!(self.send(:"#{self.class.facebook_session_key_field}"),
                 self.send(:"#{self.class.facebook_uid_field}"), timeout_in
               )
