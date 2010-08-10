@@ -26,6 +26,9 @@ module Devise
   # a specified Facebook UID or not.
   mattr_accessor :facebook_auto_create_account
   @@facebook_auto_create_account = true
+  
+  mattr_accessor :facebook_auto_update_account
+  @@facebook_auto_update_account = false
 end
 
 # Load core I18n locales: en

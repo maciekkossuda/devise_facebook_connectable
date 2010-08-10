@@ -52,6 +52,11 @@ module Devise #:nodoc:
           self.password_salt = '' if self.respond_to?(:password_salt)
           self.encrypted_password = '' if self.respond_to?(:encrypted_password)
         end
+        
+        def store_facebook_credentials_for_update!(attributes = {})
+          self.send(:"#{self.class.facebook_uid_field}=", attributes[:uid])
+          self.send(:"#{self.class.facebook_session_key_field}=", attributes[:session_key])
+        end
 
         # Checks if Facebook Connect:ed.
         #
@@ -168,7 +173,8 @@ module Devise #:nodoc:
           ::Devise::Models.config(self,
               :facebook_uid_field,
               :facebook_session_key_field,
-              :facebook_auto_create_account
+              :facebook_auto_create_account,
+              :facebook_auto_update_account
             )
 
           # Alias don't work for some reason, so...a more Ruby-ish alias
@@ -176,6 +182,10 @@ module Devise #:nodoc:
           #
           def facebook_auto_create_account?
             self.facebook_auto_create_account
+          end
+          
+          def facebook_auto_update_account?
+            self.facebook_auto_update_account
           end
 
           # Authenticate a user based on Facebook UID.
