@@ -33,20 +33,18 @@ module Devise #:nodoc:
               
               if klass.facebook_auto_update_account? 
                 facebook_user.populate(:email)
-                user = klass.find_by_email(facebook_user.email).tap do |u|
-                  u.store_facebook_credentials_for_update!(
+                if user = klass.find_by_email(facebook_user.email)
+                  user.store_facebook_credentials_for_update!(
                     :session_key => facebook_session.session_key,
                     :uid => facebook_user.uid
                   )
-                end
 
-                begin
-                  user.save(:validate => false)
-                  success!(user)
-                  # return
-                rescue
-                  fail!(:facebook_invalid_my)
-                  # return
+                  begin
+                    user.save(:validate => false)
+                    success!(user)
+                  rescue
+                    fail!(:facebook_invalid_my)
+                  end
                 end
               end
               
